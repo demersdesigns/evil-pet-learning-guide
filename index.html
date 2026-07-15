@@ -18,6 +18,10 @@
   h2 { font-size: 22px; margin-top: 48px; border-bottom: 2px solid #E1DFD5; padding-bottom: 8px; }
   h3 { font-size: 18px; margin-top: 32px; color: #444441; }
   svg { display: block; max-width: 100%; height: auto; margin: 20px 0; background: #fff; border: 1px solid #E1DFD5; border-radius: 8px; padding: 8px; }
+  .photos { display: flex; gap: 16px; flex-wrap: wrap; margin: 20px 0; }
+  .photos figure { flex: 1 1 320px; margin: 0; }
+  .photos img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid #E1DFD5; border-radius: 8px; }
+  .photos figcaption { font-size: 13px; color: #75736c; margin-top: 6px; }
   code { background: #EFEDE5; padding: 2px 6px; border-radius: 4px; font-size: 15px; }
   a { color: #185FA5; }
   hr { border: none; border-top: 1px solid #E1DFD5; margin: 40px 0; }
@@ -38,9 +42,17 @@
 <li>Front panel is "everything visible" — most granular parameters are direct knobs rather than buried in menus, with a shift key for secondary functions.</li>
 </ul>
 <p>This matters for your rig specifically: it's an <em>outboard</em> voice/effect, so the tutorial plan below treats it as something you route your existing modules through, not a module you patch CV into directly (it has no CV ins — control comes from its own knobs, LFOs, envelope follower, or MIDI).</p>
-<p><strong>Reference photos</strong> (front panel and rear jacks — look these up before your first session so you can match knob names to physical positions):
-- <a href="https://www.endorphin.es/modules/p/evil-pet">Front panel photo, Endorphin.es product page</a>
-- <a href="https://www.endorphin.es/modules/p/evil-pet">Rear panel/jacks photo, Endorphin.es product page</a></p>
+<p><strong>Reference photos</strong> (front panel and rear jacks — look these over before your first session so you can match knob names to physical positions):</p>
+<div class="photos">
+<figure>
+<img src="https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/0ea97759-b627-45f5-a44b-92d2818752cf/EVIL_PET_side_16x9.png" alt="Evil Pet front panel" loading="lazy">
+<figcaption>Front panel — photo: <a href="https://www.endorphin.es/modules/p/evil-pet">Endorphin.es</a></figcaption>
+</figure>
+<figure>
+<img src="https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/38e0f481-8923-47b9-b1fb-6136ab2c03c2/EVIL_PET_rear_jacks_16x9.png" alt="Evil Pet rear panel and jacks" loading="lazy">
+<figcaption>Rear panel/jacks — photo: <a href="https://www.endorphin.es/modules/p/evil-pet">Endorphin.es</a></figcaption>
+</figure>
+</div>
 <h3>Functional control map</h3>
 <p>The panel groups roughly into five zones. This diagram shows how signal and control move between them — use it as your mental map before matching it to the physical layout in the photos above.</p>
 <p><svg width="100%" viewBox="0 0 680 460" role="img"><title>Evil Pet functional control map</title><desc>Diagram showing the Evil Pet's controls grouped into source, granular engine, filter, modulation, and FX/output zones</desc>

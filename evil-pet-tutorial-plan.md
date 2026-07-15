@@ -14,9 +14,13 @@
 
 This matters for your rig specifically: it's an *outboard* voice/effect, so the tutorial plan below treats it as something you route your existing modules through, not a module you patch CV into directly (it has no CV ins — control comes from its own knobs, LFOs, envelope follower, or MIDI).
 
-**Reference photos** (front panel and rear jacks — look these up before your first session so you can match knob names to physical positions):
-- [Front panel photo, Endorphin.es product page](https://www.endorphin.es/modules/p/evil-pet)
-- [Rear panel/jacks photo, Endorphin.es product page](https://www.endorphin.es/modules/p/evil-pet)
+**Reference photos** (front panel and rear jacks — look these over before your first session so you can match knob names to physical positions):
+
+![Evil Pet front panel](https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/0ea97759-b627-45f5-a44b-92d2818752cf/EVIL_PET_side_16x9.png)
+*Front panel — photo: [Endorphin.es](https://www.endorphin.es/modules/p/evil-pet)*
+
+![Evil Pet rear panel and jacks](https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/38e0f481-8923-47b9-b1fb-6136ab2c03c2/EVIL_PET_rear_jacks_16x9.png)
+*Rear panel/jacks — photo: [Endorphin.es](https://www.endorphin.es/modules/p/evil-pet)*
 
 ### Functional control map
 
