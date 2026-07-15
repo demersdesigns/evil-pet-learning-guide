@@ -1,0 +1,56 @@
+EVIL PET TUTORIAL SITE — CLAUDE CODE SETUP NOTES
+==================================================
+
+PROJECT FOLDER
+- Unzip evil-pet-site.zip
+- Contains: index.html (rendered plan, deploy homepage), evil-pet-tutorial-plan.md
+  (source markdown), README.md
+
+BEFORE YOU START
+- Make sure you're already logged in to the GitHub CLI and Vercel CLI, since
+  Claude Code will use your existing sessions rather than handling credentials
+  itself:
+    gh auth login
+    vercel login
+- Open the unzipped project folder in Claude Code.
+
+WHAT TO ASK CLAUDE CODE
+- One-shot request that covers repo creation, push, and Vercel setup:
+
+    "Create a new public GitHub repo called evil-pet-tutorial from this
+    folder, push it, then set up a Vercel project linked to it so pushes to
+    main auto-deploy."
+
+- Or break it into steps if you'd rather approve each stage separately:
+    1. "Initialize a git repo here and create a GitHub repo called
+       evil-pet-tutorial, then push."
+    2. "Set up a Vercel project linked to this repo."
+
+WHAT CLAUDE CODE CAN DO DIRECTLY
+- Run git init / add / commit / push
+- Run `gh repo create --source=. --push` to create the GitHub repo and push
+  in one step
+- Run the Vercel CLI (`vercel`, `vercel --prod`, `vercel link`) to deploy or
+  link the project
+- Write a vercel.json if custom config is ever needed (not required for this
+  static index.html site)
+- Show each state-changing command (git push, gh repo create, etc.) before
+  running it and wait for your approval
+
+WHAT IT CANNOT DO
+- Authenticate to GitHub or Vercel on your behalf — that's why gh auth login
+  and vercel login need to happen first, using your own credentials
+
+AFTER THE REPO + VERCEL PROJECT EXIST
+- No extra config needed: once a GitHub repo is linked to a Vercel project,
+  every push to main triggers a new production deploy automatically.
+- Pushes to other branches get their own preview URLs.
+
+MANUAL FALLBACK (if not using Claude Code)
+    git init
+    git add .
+    git commit -m "Initial commit: Evil Pet tutorial plan"
+    git branch -M main
+    git remote add origin https://github.com/<your-username>/evil-pet-tutorial.git
+    git push -u origin main
+  Then: vercel.com -> Add New -> Project -> select the repo -> Deploy
