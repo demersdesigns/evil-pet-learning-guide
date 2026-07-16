@@ -169,7 +169,7 @@ The panel groups roughly into five zones. This diagram shows how signal and cont
 </svg>
 
 - Send a generative patch (e.g. Turing Machine Mk II → Mimetic Digitalis-processed voice, or Bloom) out to the Evil Pet, granularize it, and return it to a mixer channel in parallel with the dry signal.
-- Compare this against your existing granular modules (Clep Diaz, uClouds) side by side — useful for building intuition on where Evil Pet's character differs (denser UI, built-in FX chain, feedback path) from your in-rack granular tools.
+- Compare this against your existing granular modules (uClouds) side by side — useful for building intuition on where Evil Pet's character differs (denser UI, built-in FX chain, feedback path) from your in-rack granular tools.
 
 ### Session 8 — MIDI/MPE from the rack
 - If you have a MIDI-capable sequencer/keyboard controller in your chain, feed the Evil Pet 8-voice polyphonic MPE for chord-based granular pads — distinct from your CV-sequenced modular voices.
