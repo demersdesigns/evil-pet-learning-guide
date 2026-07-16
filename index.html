@@ -2,226 +2,436 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Evil Pet Tutorial &amp; Performance Tips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 17px;
-    line-height: 1.65;
-    color: #2C2C2A;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-    background: #FBFAF7;
+  :root {
+    --primary: #024ad8;
+    --primary-bright: #296ef9;
+    --primary-deep: #0e3191;
+    --on-primary: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #292929;
+    --canvas: #ffffff;
+    --cloud: #f7f7f7;
+    --fog: #e8e8e8;
+    --steel: #c2c2c2;
+    --graphite: #636363;
+    --charcoal: #3d3d3d;
+    --hairline: #e8e8e8;
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 16px;
+    --radius-pill: 9999px;
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 20px;
+    --space-xl: 24px;
+    --space-xxl: 32px;
+    --space-section: 80px;
+    --shadow-soft: 0 2px 8px rgba(26, 26, 26, 0.08);
   }
-  h1 { font-size: 28px; margin-top: 0; }
-  h2 { font-size: 22px; margin-top: 48px; border-bottom: 2px solid #E1DFD5; padding-bottom: 8px; }
-  h3 { font-size: 18px; margin-top: 32px; color: #444441; }
-  svg { display: block; max-width: 100%; height: auto; margin: 20px 0; background: #fff; border: 1px solid #E1DFD5; border-radius: 8px; padding: 8px; }
-  .photos { display: flex; gap: 16px; flex-wrap: wrap; margin: 20px 0; }
-  .photos figure { flex: 1 1 320px; margin: 0; }
-  .photos img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid #E1DFD5; border-radius: 8px; }
-  .photos figcaption { font-size: 13px; color: #75736c; margin-top: 6px; }
-  code { background: #EFEDE5; padding: 2px 6px; border-radius: 4px; font-size: 15px; }
-  a { color: #185FA5; }
-  hr { border: none; border-top: 1px solid #E1DFD5; margin: 40px 0; }
-  li { margin-bottom: 6px; }
-  strong { color: #1a1a19; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Manrope", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.38;
+    color: var(--ink);
+    margin: 0;
+    background: var(--canvas);
+  }
+  .band { width: 100%; }
+  .band-cloud { background: var(--cloud); }
+  .band-canvas { background: var(--canvas); }
+  .band-ink { background: var(--ink); color: var(--on-primary); }
+  .container {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: var(--space-section) var(--space-xl);
+  }
+  header .container { padding-bottom: var(--space-xxl); }
+
+  h1 {
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.0;
+    margin: 0 0 var(--space-lg);
+    color: var(--ink);
+  }
+  h2 {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.0;
+    margin: 0 0 var(--space-xl);
+    color: var(--ink);
+  }
+  h2::before {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+    margin-bottom: var(--space-lg);
+  }
+  .band-ink h1, .band-ink h2, .band-ink h3 { color: var(--on-primary); }
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: var(--space-xxl) 0 var(--space-md);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  h3:first-child { margin-top: 0; }
+
+  .badge {
+    display: inline-block;
+    flex-shrink: 0;
+    background: var(--ink);
+    color: var(--on-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.38;
+    border-radius: var(--radius-lg);
+    padding: 6px 12px;
+  }
+
+  p { margin: 0 0 var(--space-md); }
+  ul { margin: 0 0 var(--space-md); padding-left: 1.2em; }
+  li { margin-bottom: var(--space-xs); }
+  li:last-child { margin-bottom: 0; }
+  strong { color: var(--ink); font-weight: 600; }
+  .band-ink strong { color: var(--on-primary); }
+
+  a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: var(--primary-deep); }
+  .band-ink a { color: var(--primary-bright); }
+  .band-ink a:hover { color: var(--primary-soft, #c9e0fc); }
+
+  code {
+    background: var(--fog);
+    color: var(--ink);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm, 3px);
+    font-size: 14px;
+  }
+
+  .lede {
+    font-size: 18px;
+    line-height: 1.33;
+    color: var(--charcoal);
+  }
+  .meta-row { display: flex; flex-direction: column; gap: var(--space-sm); margin-top: var(--space-lg); }
+  .meta-row p { margin: 0; font-size: 18px; line-height: 1.33; color: var(--charcoal); }
+  .meta-label {
+    display: inline-block;
+    font-size: 12.6px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-right: var(--space-sm);
+  }
+
+  .diagram-card, .card {
+    background: var(--canvas);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-xl);
+    margin: var(--space-lg) 0 var(--space-xl);
+  }
+  .diagram-card svg, .card svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  .photos { display: flex; gap: var(--space-md); flex-wrap: wrap; margin: var(--space-lg) 0 var(--space-xl); }
+  .photos figure {
+    flex: 1 1 320px;
+    margin: 0;
+    background: var(--canvas);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-md);
+  }
+  .photos img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+  .photos figcaption { font-size: 13px; color: var(--graphite); margin-top: var(--space-sm); }
+
+  footer .container { padding-top: var(--space-section); padding-bottom: var(--space-section); }
+  footer h2::before { background: var(--primary-bright); }
+  footer ul { list-style: none; padding-left: 0; }
+  footer li { font-size: 16px; }
+
+  @media (max-width: 640px) {
+    .container { padding: 48px var(--space-lg); }
+    h1 { font-size: 32px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 18px; }
+    .diagram-card, .card { padding: var(--space-md); }
+    .photos { flex-direction: column; }
+    .photos figure { flex: 1 1 auto; }
+  }
 </style>
 </head>
 <body>
-<h1>Evil Pet Tutorial &amp; Performance Tips — Course Plan</h1>
-<p><strong>For:</strong> a beginner-to-novice granular user with a large, ambient/generative-leaning Eurorack rig
-<strong>Goal:</strong> get comfortable with the Evil Pet's controls fast, then integrate it as a "granular voice" inside an existing modular workflow</p>
-<hr />
-<h2>0. What the Evil Pet actually is (orientation, not a lesson)</h2>
-<ul>
-<li>Desktop/pedal-format 8-voice granular processor and synth from Endorphin.es, not a Eurorack module — it patches in via 1/4" jacks, MIDI/MPE, or its own mic/radio/SD card.</li>
-<li>Four ways to get source audio in: line inputs, built-in mic, built-in FM radio tuner, or samples loaded from a microSD card. It records into a buffer (up to ~10 minutes mono, adjustable down to a few seconds).</li>
-<li>Two basic modes of use: (1) a synth you play from a MIDI/MPE keyboard, or (2) a real-time effects processor you run other gear through — exactly like a granular pedal.</li>
-<li>Front panel is "everything visible" — most granular parameters are direct knobs rather than buried in menus, with a shift key for secondary functions.</li>
-</ul>
-<p>This matters for your rig specifically: it's an <em>outboard</em> voice/effect, so the tutorial plan below treats it as something you route your existing modules through, not a module you patch CV into directly (it has no CV ins — control comes from its own knobs, LFOs, envelope follower, or MIDI).</p>
-<p><strong>Reference photos</strong> (front panel and rear jacks — look these over before your first session so you can match knob names to physical positions):</p>
-<div class="photos">
-<figure>
-<img src="https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/0ea97759-b627-45f5-a44b-92d2818752cf/EVIL_PET_side_16x9.png" alt="Evil Pet front panel" loading="lazy">
-<figcaption>Front panel — photo: <a href="https://www.endorphin.es/modules/p/evil-pet">Endorphin.es</a></figcaption>
-</figure>
-<figure>
-<img src="https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/38e0f481-8923-47b9-b1fb-6136ab2c03c2/EVIL_PET_rear_jacks_16x9.png" alt="Evil Pet rear panel and jacks" loading="lazy">
-<figcaption>Rear panel/jacks — photo: <a href="https://www.endorphin.es/modules/p/evil-pet">Endorphin.es</a></figcaption>
-</figure>
-</div>
-<h3>Functional control map</h3>
-<p>The panel groups roughly into five zones. This diagram shows how signal and control move between them — use it as your mental map before matching it to the physical layout in the photos above.</p>
-<p><svg width="100%" viewBox="0 0 680 460" role="img"><title>Evil Pet functional control map</title><desc>Diagram showing the Evil Pet's controls grouped into source, granular engine, filter, modulation, and FX/output zones</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="40" y="30" width="600" height="400" rx="20" fill="none" stroke="#888780" stroke-width="0.5"/>
-<text x="60" y="56" font-size="14" font-weight="500" fill="#2C2C2A">Evil Pet</text>
-<rect x="64" y="76" width="160" height="70" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
-<text x="144" y="98" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Source</text>
-<text x="144" y="116" font-size="12" text-anchor="middle" fill="#085041">Mic, line in, radio,</text>
-<text x="144" y="132" font-size="12" text-anchor="middle" fill="#085041">SD card samples</text>
-<line x1="224" y1="111" x2="256" y2="111" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<rect x="256" y="76" width="240" height="70" rx="12" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-<text x="376" y="94" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Granular engine</text>
-<text x="376" y="112" font-size="12" text-anchor="middle" fill="#3C3489">Position, size, grains,</text>
-<text x="376" y="128" font-size="12" text-anchor="middle" fill="#3C3489">pitch, spread, detune</text>
-<line x1="496" y1="111" x2="556" y2="111" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<rect x="500" y="76" width="120" height="70" rx="12" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
-<text x="560" y="98" font-size="14" font-weight="500" text-anchor="middle" fill="#4A1B0C">Filter</text>
-<text x="560" y="116" font-size="12" text-anchor="middle" fill="#712B13">Cutoff / res,</text>
-<text x="560" y="132" font-size="12" text-anchor="middle" fill="#712B13">multi-mode</text>
-<line x1="560" y1="146" x2="560" y2="190" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<rect x="500" y="190" width="120" height="70" rx="12" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
-<text x="560" y="212" font-size="14" font-weight="500" text-anchor="middle" fill="#4A1B0C">FX</text>
-<text x="560" y="230" font-size="12" text-anchor="middle" fill="#712B13">Saturator, reverb,</text>
-<text x="560" y="246" font-size="12" text-anchor="middle" fill="#712B13">feedback path</text>
-<line x1="500" y1="225" x2="440" y2="225" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<rect x="256" y="190" width="184" height="70" rx="12" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
-<text x="348" y="212" font-size="14" font-weight="500" text-anchor="middle" fill="#412402">Modulation</text>
-<text x="348" y="230" font-size="12" text-anchor="middle" fill="#633806">3 LFOs, envelope</text>
-<text x="348" y="246" font-size="12" text-anchor="middle" fill="#633806">follower, ADSR</text>
-<text x="348" y="284" font-size="12" text-anchor="middle" fill="#5F5E5A">Modulation targets any knob above via shift + assign</text>
-<line x1="560" y1="260" x2="560" y2="330" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<rect x="440" y="330" width="180" height="60" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
-<text x="530" y="352" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Output</text>
-<text x="530" y="370" font-size="12" text-anchor="middle" fill="#085041">Line out to mixer</text>
-</svg></p>
-<hr />
-<h2>Part 1: Foundations (Sessions 1–3)</h2>
-<h3>Session 1 — Get sound in, get sound out</h3>
-<p><svg width="100%" viewBox="0 0 680 160" role="img"><title>Session 1 basic patch</title><desc>Eurorack voice into Evil Pet line input, processed, out to mixer</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="40" y="50" width="160" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
-<text x="120" y="68" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Eurorack voice</text>
-<text x="120" y="86" font-size="12" text-anchor="middle" fill="#085041">e.g. Airstreamer</text>
-<line x1="200" y1="78" x2="256" y2="78" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<text x="228" y="66" font-size="12" text-anchor="middle" fill="#5F5E5A">line out</text>
-<rect x="260" y="50" width="160" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-<text x="340" y="68" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Evil Pet</text>
-<text x="340" y="86" font-size="12" text-anchor="middle" fill="#3C3489">line input, bypass on</text>
-<line x1="420" y1="78" x2="476" y2="78" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
-<text x="448" y="66" font-size="12" text-anchor="middle" fill="#5F5E5A">line out</text>
-<rect x="480" y="50" width="160" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
-<text x="560" y="68" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Mixer / monitors</text>
-<text x="560" y="86" font-size="12" text-anchor="middle" fill="#444441">confirm dry signal</text>
-</svg></p>
-<ul>
-<li>Patch a single Eurorack voice (start with something simple and melodic, e.g. Airstreamer or a basic oscillator) into the Evil Pet's line input.</li>
-<li>Leave all granular controls at defaults; just confirm dry signal passes through (Bypass button).</li>
-<li>Try the built-in mic and the FM radio as sources too — no patching needed, good for understanding "any audio in becomes grain material."</li>
-<li><strong>Concept to land:</strong> grains are short slices of <em>whatever's in the buffer</em>, not a live pass-through. Recording vs. processing-in-real-time is the first fork in the road.</li>
-</ul>
-<h3>Session 2 — The four core knobs: Position / Size(Cloud) / Grains / Pitch</h3>
-<ul>
-<li>Position: where in the buffer playback happens.</li>
-<li>Size/Cloud (shift function): how wide a window around Position the grains are drawn from.</li>
-<li>Grains: density/rate of grain generation — 12 o'clock = one grain at a time, right = denser, left = more randomized/sparse triggering.</li>
-<li>Pitch/Detune: transposition (quantized or free) and per-grain pitch randomization.</li>
-<li><strong>Exercise:</strong> freeze a single vowel sound or sustained pad from your rig and slowly sweep Position while keeping Size small — this is the clearest way to <em>hear</em> what a "grain" is before adding modulation.</li>
-</ul>
-<h3>Session 3 — Spread, Filter, and gain staging</h3>
-<ul>
-<li>Spread: stereo placement of grains.</li>
-<li>Filter: cutoff/resonance on one knob, multiple modes including a DJ-style low-to-high-pass sweep — good first "performance" control because it's immediately musical.</li>
-<li><strong>Practical note from user reports:</strong> some units are prone to crackling/aliasing at extreme Grains/Size settings regardless of gain staging — set input trim conservatively and treat crackle as a texture option, not always a fault, once you've ruled out overs.</li>
-</ul>
-<hr />
-<h2>Part 2: Motion &amp; Character (Sessions 4–6)</h2>
-<h3>Session 4 — Modulation sources</h3>
-<ul>
-<li>Three LFOs (shape + speed) assignable by press-and-twist to any knob.</li>
-<li>Envelope follower — takes shape from the incoming audio, so a rhythmic modular sequence can "drive" the Evil Pet without a shared clock.</li>
-<li>ADSR — for when you're playing it as a synth from MIDI/MPE.</li>
-<li><strong>Exercise:</strong> route your Pamela's PRO Workout output into the Evil Pet's line/audio path as an audio-rate modulation <em>source</em> (not CV — remember, no CV ins), then use the envelope follower to let its rhythm control grain density.</li>
-</ul>
-<h3>Session 5 — The Saturator (it's really four effects in one)</h3>
-<ul>
-<li>Distortion, sample-rate reduction, bit-crushing, chorus/flanger, and — the standout — <strong>Feedback mode</strong>, where granulated output re-enters the buffer.</li>
-<li>Feedback is the fastest route to self-sustaining ambient drones and can self-oscillate; several users note it's easy to get runaway feedback, so approach the knob slowly and know where Volume/Mute is.</li>
-<li><strong>Exercise:</strong> with nothing patched in, use only the built-in mic + Feedback mode to build a drone from room tone — a good "no-input" performance move for live sets.</li>
-</ul>
-<p><svg width="100%" viewBox="0 0 680 220" role="img"><title>Feedback drone patch</title><desc>Built-in mic feeds the Evil Pet, saturator set to feedback mode loops granulated output back into the buffer, out to mixer</desc>
-<defs><marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="40" y="70" width="140" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
-<text x="110" y="88" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Built-in mic</text>
-<text x="110" y="106" font-size="12" text-anchor="middle" fill="#085041">room tone</text>
-<line x1="180" y1="98" x2="236" y2="98" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow2)"/>
-<rect x="240" y="40" width="200" height="116" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-<text x="340" y="62" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Evil Pet</text>
-<text x="340" y="80" font-size="12" text-anchor="middle" fill="#3C3489">granular engine</text>
-<line x1="270" y1="94" x2="410" y2="94" stroke="#AFA9EC" stroke-width="0.5"/>
-<text x="340" y="112" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Saturator: feedback</text>
-<text x="340" y="130" font-size="12" text-anchor="middle" fill="#3C3489">output re-enters buffer</text>
-<path d="M420 40 C 460 10, 500 10, 500 40" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow2)"/>
-<text x="460" y="20" font-size="12" text-anchor="middle" fill="#5F5E5A">↻ self-feeds</text>
-<line x1="440" y1="98" x2="496" y2="98" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow2)"/>
-<rect x="500" y="70" width="140" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
-<text x="570" y="88" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Mixer out</text>
-<text x="570" y="106" font-size="12" text-anchor="middle" fill="#444441">watch runaway gain</text>
-</svg></p>
-<h3>Session 6 — Reverb and the Random button</h3>
-<ul>
-<li>Reverb modes (plate, reverse, room, shimmer-leaning per user reports) round out the ambient toolkit.</li>
-<li>Random button randomizes most knobs (not Mix/Volume) — genuinely useful as a "get unstuck" tool during both practice and live performance, not just a novelty.</li>
-</ul>
-<hr />
-<h2>Part 3: Integration with your Eurorack rig (Sessions 7–9)</h2>
-<h3>Session 7 — Evil Pet as an FX return</h3>
-<p><svg width="100%" viewBox="0 0 680 240" role="img"><title>Evil Pet as an FX return</title><desc>Generative modular patch split to a mixer send into the Evil Pet and back on a return channel, running parallel to the dry signal</desc>
-<defs><marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="40" y="90" width="150" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
-<text x="115" y="108" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Generative voice</text>
-<text x="115" y="126" font-size="12" text-anchor="middle" fill="#085041">Turing Machine + Mimetic</text>
-<line x1="190" y1="118" x2="256" y2="118" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
-<rect x="260" y="90" width="140" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
-<text x="330" y="108" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Mixer</text>
-<text x="330" y="126" font-size="12" text-anchor="middle" fill="#444441">dry + send</text>
-<line x1="330" y1="146" x2="330" y2="190" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
-<text x="330" y="168" font-size="12" text-anchor="middle" fill="#5F5E5A">dry channel to master</text>
-<line x1="400" y1="106" x2="456" y2="60" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
-<text x="440" y="52" font-size="12" text-anchor="middle" fill="#5F5E5A">send</text>
-<rect x="460" y="30" width="160" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
-<text x="540" y="48" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Evil Pet</text>
-<text x="540" y="66" font-size="12" text-anchor="middle" fill="#3C3489">granularize</text>
-<path d="M460 70 C 420 100, 400 140, 340 170" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
-<text x="420" y="130" font-size="12" text-anchor="middle" fill="#5F5E5A">return, blended with dry</text>
-<rect x="260" y="190" width="140" height="40" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
-<text x="330" y="210" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Master out</text>
-</svg></p>
-<ul>
-<li>Send a generative patch (e.g. Turing Machine Mk II → Mimetic Digitalis-processed voice, or Bloom) out to the Evil Pet, granularize it, and return it to a mixer channel in parallel with the dry signal.</li>
-<li>Compare this against your existing granular modules (uClouds) side by side — useful for building intuition on where Evil Pet's character differs (denser UI, built-in FX chain, feedback path) from your in-rack granular tools.</li>
-</ul>
-<h3>Session 8 — MIDI/MPE from the rack</h3>
-<ul>
-<li>If you have a MIDI-capable sequencer/keyboard controller in your chain, feed the Evil Pet 8-voice polyphonic MPE for chord-based granular pads — distinct from your CV-sequenced modular voices.</li>
-<li>Layer the Evil Pet's onboard digital oscillator (sine/tri/saw/square) under processed grains for a fuller polyphonic texture.</li>
-</ul>
-<h3>Session 9 — Building a performance patch</h3>
-<ul>
-<li>Combine: one modular voice as grain source → Evil Pet Feedback for sustain → Filter sweep as the "performance knob" → Random button as a controlled wildcard → return to mixer alongside a second, untouched modular voice for contrast.</li>
-<li>Rehearse muting/bypassing cleanly — Feedback patches can run away, so always know your fastest path back to silence.</li>
-</ul>
-<hr />
-<h2>Performance Tips (quick-reference, not sequential)</h2>
-<ul>
-<li><strong>FM radio as a live sampler:</strong> unpredictable, characterful source material — great for textural surprises in an ambient set, but be mindful of copyright if recording sets for release.</li>
-<li><strong>Feedback = drone engine:</strong> your fastest path to a sustained ambient pad with zero external source material.</li>
-<li><strong>Grains knob as a rhythm control:</strong> turning past 12 o'clock for density, or left for probabilistic sparse triggering, is a fast way to move between "wash" and "glitch" live.</li>
-<li><strong>Use the LED brightness trick:</strong> shift-function knobs (Position/Spread, Size/Cloud) show the alternate value via LED brightness — glance at this instead of guessing during a set.</li>
-<li><strong>Known hardware quirks to watch for:</strong> a few users report the Position knob losing calibration (try switching the knob response mode between SNAP/JUMP if this happens) and occasional crackle independent of gain staging — worth soundchecking before a live set rather than discovering it on stage.</li>
-<li><strong>Keep a "reset" preset:</strong> given how easy it is to wander via Random and Feedback, save one baseline preset you can always jump back to mid-set.</li>
-</ul>
-<hr />
-<h2>Resources</h2>
-<ul>
-<li>Manual: linked from the <a href="https://www.endorphin.es/modules/p/evil-pet">Evil Pet product page</a></li>
-<li>Firmware updates and factory presets: linked from the same product page</li>
-<li>Community troubleshooting and patch ideas: MOD WIGGLER and Elektronauts Evil Pet threads</li>
-<li>Video: Perfect Circuit's "Feed After Midnight" overview and various live-processing demos on YouTube (search "Endorphin.es Evil Pet review")</li>
-</ul>
+
+<header class="band band-cloud">
+  <div class="container">
+    <h1>Evil Pet Tutorial &amp; Performance Tips — Course Plan</h1>
+    <div class="meta-row">
+      <p><span class="meta-label">For</span>a beginner-to-novice granular user with a large, ambient/generative-leaning Eurorack rig</p>
+      <p><span class="meta-label">Goal</span>get comfortable with the Evil Pet's controls fast, then integrate it as a "granular voice" inside an existing modular workflow</p>
+    </div>
+  </div>
+</header>
+
+<section class="band band-canvas">
+  <div class="container">
+    <h2>0. What the Evil Pet actually is (orientation, not a lesson)</h2>
+    <ul>
+      <li>Desktop/pedal-format 8-voice granular processor and synth from Endorphin.es, not a Eurorack module — it patches in via 1/4" jacks, MIDI/MPE, or its own mic/radio/SD card.</li>
+      <li>Four ways to get source audio in: line inputs, built-in mic, built-in FM radio tuner, or samples loaded from a microSD card. It records into a buffer (up to ~10 minutes mono, adjustable down to a few seconds).</li>
+      <li>Two basic modes of use: (1) a synth you play from a MIDI/MPE keyboard, or (2) a real-time effects processor you run other gear through — exactly like a granular pedal.</li>
+      <li>Front panel is "everything visible" — most granular parameters are direct knobs rather than buried in menus, with a shift key for secondary functions.</li>
+    </ul>
+    <p>This matters for your rig specifically: it's an <em>outboard</em> voice/effect, so the tutorial plan below treats it as something you route your existing modules through, not a module you patch CV into directly (it has no CV ins — control comes from its own knobs, LFOs, envelope follower, or MIDI).</p>
+    <p><strong>Reference photos</strong> (front panel and rear jacks — look these over before your first session so you can match knob names to physical positions):</p>
+    <div class="photos">
+      <figure>
+        <img src="https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/0ea97759-b627-45f5-a44b-92d2818752cf/EVIL_PET_side_16x9.png" alt="Evil Pet front panel" loading="lazy">
+        <figcaption>Front panel — photo: <a href="https://www.endorphin.es/modules/p/evil-pet">Endorphin.es</a></figcaption>
+      </figure>
+      <figure>
+        <img src="https://images.squarespace-cdn.com/content/v1/614ef1178bea24770dea5c80/38e0f481-8923-47b9-b1fb-6136ab2c03c2/EVIL_PET_rear_jacks_16x9.png" alt="Evil Pet rear panel and jacks" loading="lazy">
+        <figcaption>Rear panel/jacks — photo: <a href="https://www.endorphin.es/modules/p/evil-pet">Endorphin.es</a></figcaption>
+      </figure>
+    </div>
+
+    <h3>Functional control map</h3>
+    <p>The panel groups roughly into five zones. This diagram shows how signal and control move between them — use it as your mental map before matching it to the physical layout in the photos above.</p>
+    <div class="diagram-card">
+      <svg width="100%" viewBox="0 0 680 460" role="img"><title>Evil Pet functional control map</title><desc>Diagram showing the Evil Pet's controls grouped into source, granular engine, filter, modulation, and FX/output zones</desc>
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="40" y="30" width="600" height="400" rx="20" fill="none" stroke="#888780" stroke-width="0.5"/>
+      <text x="60" y="56" font-size="14" font-weight="500" fill="#2C2C2A">Evil Pet</text>
+      <rect x="64" y="76" width="160" height="70" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+      <text x="144" y="98" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Source</text>
+      <text x="144" y="116" font-size="12" text-anchor="middle" fill="#085041">Mic, line in, radio,</text>
+      <text x="144" y="132" font-size="12" text-anchor="middle" fill="#085041">SD card samples</text>
+      <line x1="224" y1="111" x2="256" y2="111" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="256" y="76" width="240" height="70" rx="12" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="376" y="94" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Granular engine</text>
+      <text x="376" y="112" font-size="12" text-anchor="middle" fill="#3C3489">Position, size, grains,</text>
+      <text x="376" y="128" font-size="12" text-anchor="middle" fill="#3C3489">pitch, spread, detune</text>
+      <line x1="496" y1="111" x2="556" y2="111" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="500" y="76" width="120" height="70" rx="12" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+      <text x="560" y="98" font-size="14" font-weight="500" text-anchor="middle" fill="#4A1B0C">Filter</text>
+      <text x="560" y="116" font-size="12" text-anchor="middle" fill="#712B13">Cutoff / res,</text>
+      <text x="560" y="132" font-size="12" text-anchor="middle" fill="#712B13">multi-mode</text>
+      <line x1="560" y1="146" x2="560" y2="190" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="500" y="190" width="120" height="70" rx="12" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+      <text x="560" y="212" font-size="14" font-weight="500" text-anchor="middle" fill="#4A1B0C">FX</text>
+      <text x="560" y="230" font-size="12" text-anchor="middle" fill="#712B13">Saturator, reverb,</text>
+      <text x="560" y="246" font-size="12" text-anchor="middle" fill="#712B13">feedback path</text>
+      <line x1="500" y1="225" x2="440" y2="225" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="256" y="190" width="184" height="70" rx="12" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+      <text x="348" y="212" font-size="14" font-weight="500" text-anchor="middle" fill="#412402">Modulation</text>
+      <text x="348" y="230" font-size="12" text-anchor="middle" fill="#633806">3 LFOs, envelope</text>
+      <text x="348" y="246" font-size="12" text-anchor="middle" fill="#633806">follower, ADSR</text>
+      <text x="348" y="284" font-size="12" text-anchor="middle" fill="#5F5E5A">Modulation targets any knob above via shift + assign</text>
+      <line x1="560" y1="260" x2="560" y2="330" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="440" y="330" width="180" height="60" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+      <text x="530" y="352" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Output</text>
+      <text x="530" y="370" font-size="12" text-anchor="middle" fill="#085041">Line out to mixer</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="band band-cloud">
+  <div class="container">
+    <h2>Part 1: Foundations (Sessions 1–3)</h2>
+
+    <h3><span class="badge">Session 1</span>Get sound in, get sound out</h3>
+    <div class="diagram-card">
+      <svg width="100%" viewBox="0 0 680 160" role="img"><title>Session 1 basic patch</title><desc>Eurorack voice into Evil Pet line input, processed, out to mixer</desc>
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="40" y="50" width="160" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+      <text x="120" y="68" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Eurorack voice</text>
+      <text x="120" y="86" font-size="12" text-anchor="middle" fill="#085041">e.g. Airstreamer</text>
+      <line x1="200" y1="78" x2="256" y2="78" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="228" y="66" font-size="12" text-anchor="middle" fill="#5F5E5A">line out</text>
+      <rect x="260" y="50" width="160" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="340" y="68" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Evil Pet</text>
+      <text x="340" y="86" font-size="12" text-anchor="middle" fill="#3C3489">line input, bypass on</text>
+      <line x1="420" y1="78" x2="476" y2="78" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="448" y="66" font-size="12" text-anchor="middle" fill="#5F5E5A">line out</text>
+      <rect x="480" y="50" width="160" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+      <text x="560" y="68" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Mixer / monitors</text>
+      <text x="560" y="86" font-size="12" text-anchor="middle" fill="#444441">confirm dry signal</text>
+      </svg>
+    </div>
+    <ul>
+      <li>Patch a single Eurorack voice (start with something simple and melodic, e.g. Airstreamer or a basic oscillator) into the Evil Pet's line input.</li>
+      <li>Leave all granular controls at defaults; just confirm dry signal passes through (Bypass button).</li>
+      <li>Try the built-in mic and the FM radio as sources too — no patching needed, good for understanding "any audio in becomes grain material."</li>
+      <li><strong>Concept to land:</strong> grains are short slices of <em>whatever's in the buffer</em>, not a live pass-through. Recording vs. processing-in-real-time is the first fork in the road.</li>
+    </ul>
+
+    <h3><span class="badge">Session 2</span>The four core knobs: Position / Size(Cloud) / Grains / Pitch</h3>
+    <ul>
+      <li>Position: where in the buffer playback happens.</li>
+      <li>Size/Cloud (shift function): how wide a window around Position the grains are drawn from.</li>
+      <li>Grains: density/rate of grain generation — 12 o'clock = one grain at a time, right = denser, left = more randomized/sparse triggering.</li>
+      <li>Pitch/Detune: transposition (quantized or free) and per-grain pitch randomization.</li>
+      <li><strong>Exercise:</strong> freeze a single vowel sound or sustained pad from your rig and slowly sweep Position while keeping Size small — this is the clearest way to <em>hear</em> what a "grain" is before adding modulation.</li>
+    </ul>
+
+    <h3><span class="badge">Session 3</span>Spread, Filter, and gain staging</h3>
+    <ul>
+      <li>Spread: stereo placement of grains.</li>
+      <li>Filter: cutoff/resonance on one knob, multiple modes including a DJ-style low-to-high-pass sweep — good first "performance" control because it's immediately musical.</li>
+      <li><strong>Practical note from user reports:</strong> some units are prone to crackling/aliasing at extreme Grains/Size settings regardless of gain staging — set input trim conservatively and treat crackle as a texture option, not always a fault, once you've ruled out overs.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="band band-canvas">
+  <div class="container">
+    <h2>Part 2: Motion &amp; Character (Sessions 4–6)</h2>
+
+    <h3><span class="badge">Session 4</span>Modulation sources</h3>
+    <ul>
+      <li>Three LFOs (shape + speed) assignable by press-and-twist to any knob.</li>
+      <li>Envelope follower — takes shape from the incoming audio, so a rhythmic modular sequence can "drive" the Evil Pet without a shared clock.</li>
+      <li>ADSR — for when you're playing it as a synth from MIDI/MPE.</li>
+      <li><strong>Exercise:</strong> route your Pamela's PRO Workout output into the Evil Pet's line/audio path as an audio-rate modulation <em>source</em> (not CV — remember, no CV ins), then use the envelope follower to let its rhythm control grain density.</li>
+    </ul>
+
+    <h3><span class="badge">Session 5</span>The Saturator (it's really four effects in one)</h3>
+    <ul>
+      <li>Distortion, sample-rate reduction, bit-crushing, chorus/flanger, and — the standout — <strong>Feedback mode</strong>, where granulated output re-enters the buffer.</li>
+      <li>Feedback is the fastest route to self-sustaining ambient drones and can self-oscillate; several users note it's easy to get runaway feedback, so approach the knob slowly and know where Volume/Mute is.</li>
+      <li><strong>Exercise:</strong> with nothing patched in, use only the built-in mic + Feedback mode to build a drone from room tone — a good "no-input" performance move for live sets.</li>
+    </ul>
+    <div class="diagram-card">
+      <svg width="100%" viewBox="0 0 680 220" role="img"><title>Feedback drone patch</title><desc>Built-in mic feeds the Evil Pet, saturator set to feedback mode loops granulated output back into the buffer, out to mixer</desc>
+      <defs><marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="40" y="70" width="140" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+      <text x="110" y="88" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Built-in mic</text>
+      <text x="110" y="106" font-size="12" text-anchor="middle" fill="#085041">room tone</text>
+      <line x1="180" y1="98" x2="236" y2="98" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow2)"/>
+      <rect x="240" y="40" width="200" height="116" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="340" y="62" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Evil Pet</text>
+      <text x="340" y="80" font-size="12" text-anchor="middle" fill="#3C3489">granular engine</text>
+      <line x1="270" y1="94" x2="410" y2="94" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="340" y="112" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Saturator: feedback</text>
+      <text x="340" y="130" font-size="12" text-anchor="middle" fill="#3C3489">output re-enters buffer</text>
+      <path d="M420 40 C 460 10, 500 10, 500 40" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow2)"/>
+      <text x="460" y="20" font-size="12" text-anchor="middle" fill="#5F5E5A">↻ self-feeds</text>
+      <line x1="440" y1="98" x2="496" y2="98" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow2)"/>
+      <rect x="500" y="70" width="140" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+      <text x="570" y="88" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Mixer out</text>
+      <text x="570" y="106" font-size="12" text-anchor="middle" fill="#444441">watch runaway gain</text>
+      </svg>
+    </div>
+
+    <h3><span class="badge">Session 6</span>Reverb and the Random button</h3>
+    <ul>
+      <li>Reverb modes (plate, reverse, room, shimmer-leaning per user reports) round out the ambient toolkit.</li>
+      <li>Random button randomizes most knobs (not Mix/Volume) — genuinely useful as a "get unstuck" tool during both practice and live performance, not just a novelty.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="band band-cloud">
+  <div class="container">
+    <h2>Part 3: Integration with your Eurorack rig (Sessions 7–9)</h2>
+
+    <h3><span class="badge">Session 7</span>Evil Pet as an FX return</h3>
+    <div class="diagram-card">
+      <svg width="100%" viewBox="0 0 680 240" role="img"><title>Evil Pet as an FX return</title><desc>Generative modular patch split to a mixer send into the Evil Pet and back on a return channel, running parallel to the dry signal</desc>
+      <defs><marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="40" y="90" width="150" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+      <text x="115" y="108" font-size="14" font-weight="500" text-anchor="middle" fill="#04342C">Generative voice</text>
+      <text x="115" y="126" font-size="12" text-anchor="middle" fill="#085041">Turing Machine + Mimetic</text>
+      <line x1="190" y1="118" x2="256" y2="118" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
+      <rect x="260" y="90" width="140" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+      <text x="330" y="108" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Mixer</text>
+      <text x="330" y="126" font-size="12" text-anchor="middle" fill="#444441">dry + send</text>
+      <line x1="330" y1="146" x2="330" y2="190" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
+      <text x="330" y="168" font-size="12" text-anchor="middle" fill="#5F5E5A">dry channel to master</text>
+      <line x1="400" y1="106" x2="456" y2="60" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
+      <text x="440" y="52" font-size="12" text-anchor="middle" fill="#5F5E5A">send</text>
+      <rect x="460" y="30" width="160" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="540" y="48" font-size="14" font-weight="500" text-anchor="middle" fill="#26215C">Evil Pet</text>
+      <text x="540" y="66" font-size="12" text-anchor="middle" fill="#3C3489">granularize</text>
+      <path d="M460 70 C 420 100, 400 140, 340 170" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow3)"/>
+      <text x="420" y="130" font-size="12" text-anchor="middle" fill="#5F5E5A">return, blended with dry</text>
+      <rect x="260" y="190" width="140" height="40" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+      <text x="330" y="210" font-size="14" font-weight="500" text-anchor="middle" fill="#2C2C2A">Master out</text>
+      </svg>
+    </div>
+    <ul>
+      <li>Send a generative patch (e.g. Turing Machine Mk II → Mimetic Digitalis-processed voice, or Bloom) out to the Evil Pet, granularize it, and return it to a mixer channel in parallel with the dry signal.</li>
+      <li>Compare this against your existing granular modules (uClouds) side by side — useful for building intuition on where Evil Pet's character differs (denser UI, built-in FX chain, feedback path) from your in-rack granular tools.</li>
+    </ul>
+
+    <h3><span class="badge">Session 8</span>MIDI/MPE from the rack</h3>
+    <ul>
+      <li>If you have a MIDI-capable sequencer/keyboard controller in your chain, feed the Evil Pet 8-voice polyphonic MPE for chord-based granular pads — distinct from your CV-sequenced modular voices.</li>
+      <li>Layer the Evil Pet's onboard digital oscillator (sine/tri/saw/square) under processed grains for a fuller polyphonic texture.</li>
+    </ul>
+
+    <h3><span class="badge">Session 9</span>Building a performance patch</h3>
+    <ul>
+      <li>Combine: one modular voice as grain source → Evil Pet Feedback for sustain → Filter sweep as the "performance knob" → Random button as a controlled wildcard → return to mixer alongside a second, untouched modular voice for contrast.</li>
+      <li>Rehearse muting/bypassing cleanly — Feedback patches can run away, so always know your fastest path back to silence.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="band band-canvas">
+  <div class="container">
+    <h2>Performance Tips (quick-reference, not sequential)</h2>
+    <ul>
+      <li><strong>FM radio as a live sampler:</strong> unpredictable, characterful source material — great for textural surprises in an ambient set, but be mindful of copyright if recording sets for release.</li>
+      <li><strong>Feedback = drone engine:</strong> your fastest path to a sustained ambient pad with zero external source material.</li>
+      <li><strong>Grains knob as a rhythm control:</strong> turning past 12 o'clock for density, or left for probabilistic sparse triggering, is a fast way to move between "wash" and "glitch" live.</li>
+      <li><strong>Use the LED brightness trick:</strong> shift-function knobs (Position/Spread, Size/Cloud) show the alternate value via LED brightness — glance at this instead of guessing during a set.</li>
+      <li><strong>Known hardware quirks to watch for:</strong> a few users report the Position knob losing calibration (try switching the knob response mode between SNAP/JUMP if this happens) and occasional crackle independent of gain staging — worth soundchecking before a live set rather than discovering it on stage.</li>
+      <li><strong>Keep a "reset" preset:</strong> given how easy it is to wander via Random and Feedback, save one baseline preset you can always jump back to mid-set.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="band band-ink">
+  <div class="container">
+    <h2>Resources</h2>
+    <ul>
+      <li>Manual: linked from the <a href="https://www.endorphin.es/modules/p/evil-pet">Evil Pet product page</a></li>
+      <li>Firmware updates and factory presets: linked from the same product page</li>
+      <li>Community troubleshooting and patch ideas: MOD WIGGLER and Elektronauts Evil Pet threads</li>
+      <li>Video: Perfect Circuit's "Feed After Midnight" overview and various live-processing demos on YouTube (search "Endorphin.es Evil Pet review")</li>
+    </ul>
+  </div>
+</footer>
+
 </body>
 </html>
